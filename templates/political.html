@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Political snapshot</title>
+  <style>body{font-family:Arial,Helvetica,sans-serif;padding:20px} a{color:navy}</style>
+</head>
+<body>
+  <h1>San Diego political snapshot</h1>
+  <p><a href="{{ url_for('index') }}">New scrape</a> | <a href="{{ url_for('history') }}">History</a></p>
+
+  <h2>Supervisors</h2>
+  {% if snapshot.supervisors %}
+    <ul>
+      {% for s in snapshot.supervisors %}
+        <li>{{ s.name }}{% if s.title %} — {{ s.title }}{% endif %}{% if s.link %} (<a href="{{ s.link }}" target="_blank">link</a>){% endif %}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No supervisors found.</p>
+  {% endif %}
+
+  <h2>Election results (sdvote heuristics)</h2>
+  {% set races = snapshot.election_results.races %}
+  {% if races %}
+    {% for r in races %}
+      <h3>{{ r.title or 'Table' }}</h3>
+      <table border="1" cellpadding="6" cellspacing="0">
+        {% if r.headers %}
+          <tr>
+            {% for h in r.headers %}
+              <th>{{ h }}</th>
+            {% endfor %}
+          </tr>
+        {% endif %}
+        {% for row in r.rows %}
+          <tr>
+            {% for c in row %}
+              <td>{{ c }}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </table>
+    {% endfor %}
+  {% else %}
+    <p>No election tables found.</p>
+  {% endif %}
+
+  <form action="{{ url_for('political_save') }}" method="post">
+    <button type="submit">Save snapshot to history</button>
+  </form>
+</body>
+</html>

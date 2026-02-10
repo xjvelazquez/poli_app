@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Scrape entry</title>
+  <style>body{font-family:Arial,Helvetica,sans-serif;padding:20px} a{color:navy}</style>
+</head>
+<body>
+  <h1>Scrape entry {{ entry.id }}</h1>
+  <p><strong>URL:</strong> <a href="{{ entry.url }}" target="_blank">{{ entry.url }}</a></p>
+  <p><strong>Title:</strong> {{ entry.title }}</p>
+  <p><strong>H1:</strong> {{ entry.h1 }}</p>
+  <p><strong>Meta Description:</strong> {{ entry.meta_description }}</p>
+
+  <h2>Paragraphs</h2>
+  <ul>
+    {% for p in entry.paragraphs %}
+      <li>{{ p }}</li>
+    {% else %}
+      <li>No paragraphs found.</li>
+    {% endfor %}
+  </ul>
+
+  <h2>Links</h2>
+  <ul>
+    {% for l in entry.links %}
+      <li><a href="{{ l.href }}" target="_blank">{{ l.text or l.href }}</a></li>
+    {% else %}
+      <li>No links found.</li>
+    {% endfor %}
+  </ul>
+
+  <p><a href="{{ url_for('history') }}">Back to history</a></p>
+</body>
+</html>
