@@ -2,15 +2,13 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Simple Scraper</title>
-  <style>body{font-family:Arial,Helvetica,sans-serif;padding:20px}</style>
+  <title>San Diego Political Snapshot</title>
+  <style>body{font-family:Arial,Helvetica,sans-serif;padding:20px} a{color:navy}</style>
 </head>
 <body>
-  <h1>Simple Scraper</h1>
-  <form action="{{ url_for('scrape') }}" method="post">
-    <input type="url" name="url" placeholder="https://example.com" required style="width:420px;padding:8px">
-    <button type="submit">Scrape</button>
-  </form>
+  <h1>San Diego Political Snapshot</h1>
+  <p><a href="{{ url_for('history') }}">History</a></p>
+
   {% with messages = get_flashed_messages() %}
     {% if messages %}
       <ul>
@@ -20,5 +18,22 @@
       </ul>
     {% endif %}
   {% endwith %}
+
+  {% if snapshot %}
+    {% if updated_at %}
+      <p><strong>Last updated:</strong> {{ updated_at }} UTC</p>
+    {% endif %}
+    {% if snapshot.summary %}
+      <ul>
+        {% for line in snapshot.summary %}
+          <li>{{ line }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No data available yet. The background snapshot has not produced output.</p>
+    {% endif %}
+  {% else %}
+    <p>No snapshot available yet. The background scraper has not run yet — please check back shortly.</p>
+  {% endif %}
 </body>
 </html>

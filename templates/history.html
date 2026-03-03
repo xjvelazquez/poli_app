@@ -6,8 +6,8 @@
   <style>body{font-family:Arial,Helvetica,sans-serif;padding:20px} a{color:navy}</style>
 </head>
 <body>
-  <h1>Scrape history</h1>
-  <p><a href="{{ url_for('index') }}">New scrape</a></p>
+  <h1>Snapshot history</h1>
+  <p><a href="{{ url_for('index') }}">Latest snapshot</a></p>
   <table border="1" cellpadding="6" cellspacing="0">
     <tr><th>ID</th><th>URL</th><th>Title</th><th>Created</th></tr>
     {% for e in entries %}
