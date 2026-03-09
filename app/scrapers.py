@@ -1,3 +1,5 @@
+import re
+import json
 import requests
 from bs4 import BeautifulSoup
 
@@ -164,44 +166,49 @@ def get_election_results(url, container_selector=None):
 
 
 def scrape_sdvote_results(url=None):
-    """Scrape San Diego Registrar (sdvote) election result tables heuristically.
+    """Scrape San Diego Registrar past election records from sdvote.com.
 
-    If `url` is None, uses a generic sdvote results page. Returns a dict:
-    {'races': [ { 'title': str, 'headers': [...], 'rows': [[...], ...] }, ... ]}
-    This is heuristic and intended for public, tabular result pages.
+    The page embeds election data as a JSON string inside a commented-out JS
+    variable. We extract and parse it directly rather than looking for HTML
+    tables (which are JS-rendered and empty in static HTML).
+
+    Returns: {'races': [ {'id', 'date', 'title', 'result_url', 'result_title',
+                           'canvass_url', 'canvass_title'}, ... ] }
     """
     if not url:
-        url = 'https://www.sdvote.com/content/rov/en/election-results.html'
+        url = 'https://www.sdvote.com/content/rov/en/past-election-info.html'
     try:
         soup = fetch_soup(url)
     except Exception:
         return {'races': []}
 
     races = []
-
-    # look for table blocks that appear to be result tables
-    for tbl in soup.find_all('table'):
-        # headers
-        headers = [th.get_text(strip=True) for th in tbl.find_all('th')]
-        # if no <th>, try first row as header
-        rows = []
-        for tr in tbl.find_all('tr'):
-            cols = [td.get_text(strip=True) for td in tr.find_all(['td', 'th'])]
-            if cols:
-                rows.append(cols)
-
-        if not rows:
-            continue
-
-        # Heuristic: require at least one header-like row or 'Votes' / 'Candidate' text
-        flat = ' '.join(' '.join(r).lower() for r in rows)
-        if headers or 'votes' in flat or 'candidate' in flat or 'precinct' in flat:
-            # try to get a nearby heading/caption
-            title = ''
-            cap = tbl.find_previous(['h1', 'h2', 'h3', 'caption'])
-            if cap:
-                title = cap.get_text(strip=True)
-            races.append({'title': title, 'headers': headers, 'rows': rows})
+    for script in soup.find_all('script'):
+        text = script.string or ''
+        # The page embeds: //var electionData = JSON.stringify([{...}])
+        # or: var electionData = JSON.stringify([{...}])
+        match = re.search(r'electionData\s*=\s*JSON\.stringify\((\[.+\])\)', text, re.DOTALL)
+        if match:
+            try:
+                # The page uses JS hex escapes (\x22, \x26, etc.) which are not
+                # valid in JSON. Convert them to literal characters first.
+                raw = match.group(1)
+                cleaned = re.sub(r'\\x([0-9a-fA-F]{2})',
+                                 lambda m: chr(int(m.group(1), 16)), raw)
+                records = json.loads(cleaned)
+                for rec in records:
+                    races.append({
+                        'id': rec.get('id', ''),
+                        'date': rec.get('Election_Date', ''),
+                        'title': rec.get('Election_Title', ''),
+                        'result_url': rec.get('Result', ''),
+                        'result_title': rec.get('Result_Title', ''),
+                        'canvass_url': rec.get('Canvass', ''),
+                        'canvass_title': rec.get('Canvass_Title', ''),
+                    })
+            except (json.JSONDecodeError, ValueError):
+                pass
+            break  # only one electionData block expected
 
     return {'races': races}
 
