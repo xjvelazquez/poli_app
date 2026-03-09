@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, url_for, flash
 from storage import init_db, save_scrape, get_history, get_scrape_by_id, get_latest_by_url_prefix
 from scrapers import scrape_county_political_snapshot, scrape_url
+from officeholders import OFFICEHOLDERS
 import os
 import threading
 import time
@@ -116,7 +117,8 @@ def government_body(slug):
             'paragraphs': entry.get('paragraphs', []),
             'updated_at': entry.get('created_at'),
         }
-    return render_template('government.html', body=body, slug=slug, live_data=live_data)
+    officeholders = OFFICEHOLDERS.get(slug, [])
+    return render_template('government.html', body=body, slug=slug, live_data=live_data, officeholders=officeholders)
 
 
 @app.route('/history')
