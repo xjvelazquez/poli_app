@@ -30,7 +30,7 @@
 
 | ID | Title | Status | Notes |
 |----|-------|--------|-------|
-| E2-001 | Fix election races returning 0 results in background snapshot | `todo` | Background snapshot logs warning — investigate scraper |
+| E2-001 | Fix election races returning 0 results in background snapshot | `done` | sdvote.com uses JS hex escapes (\x22) in embedded JSON; use re.sub to convert before json.loads — now returns 351 records |
 | E2-002 | Scrape current City Council member roster | `todo` | sandiego.gov/city-clerk/elected |
 | E2-003 | Scrape County Supervisors roster | `todo` | sandiegocounty.gov |
 | E2-004 | Schedule and persist scraped officeholder data to DB | `todo` | Extend storage.py |
@@ -48,7 +48,31 @@
 
 ---
 
-### 🗄️ Epic 4 — Infrastructure & Quality
+### � Epic 5 — Community Events
+
+| ID | Title | Status | Notes |
+|----|-------|--------|-------|
+| E5-001 | Add /events page listing upcoming San Diego county-wide events | `todo` | Government meetings, public hearings, community events |
+| E5-002 | Scrape or aggregate events from official sources | `todo` | sandiego.gov/events, sandiegocounty.gov calendar; store in DB |
+| E5-003 | Add event detail page (/events/<id>) | `todo` | Title, date/time, location, description, official link |
+| E5-004 | Filter/search events by category or government body | `todo` | e.g. City Council meetings, Board hearings, public comment periods |
+| E5-005 | Surface upcoming events on relevant government body detail pages | `todo` | e.g. next City Council meeting shown on /government/city-council |
+
+---
+
+### 🏘️ Epic 6 — Public Resources
+
+| ID | Title | Status | Notes |
+|----|-------|--------|-------|
+| E6-001 | Add /resources page with curated public resource directory | `todo` | Housing, health, legal aid, transportation, emergency services |
+| E6-002 | Organize resources by category with search/filter | `todo` | Categories: housing, health, legal, social services, education, utilities |
+| E6-003 | Add resource detail entries (name, description, URL, phone, eligibility) | `todo` | Static data to start; can be expanded via scraping or admin input |
+| E6-004 | Surface relevant resources on government body pages | `todo` | e.g. county public health resource on /government/county-board |
+| E6-005 | Add "Report an Issue" or "Contact Your Rep" call-to-action on resource page | `todo` | Link to official contact forms for each government body |
+
+---
+
+### �🗄️ Epic 4 — Infrastructure & Quality
 
 | ID | Title | Status | Notes |
 |----|-------|--------|-------|

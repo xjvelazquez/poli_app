@@ -150,7 +150,20 @@ def _background_snapshot_loop(interval_seconds):
                 log.warning('Background snapshot: no supervisors returned')
             races = data.get('election_results', {}).get('races', [])
             if races:
-                paragraphs.append(f'Found {len(races)} election tables')
+                # deduplicate by election title, show most recent 5
+                seen = set()
+                unique_races = []
+                for r in races:
+                    key = r.get('title', '')
+                    if key and key not in seen:
+                        seen.add(key)
+                        unique_races.append(r)
+                for r in unique_races[:5]:
+                    line = r.get('title', 'Unknown election')
+                    if r.get('date'):
+                        line = f"{r['date']}: {line}"
+                    paragraphs.append(line)
+                log.info(f'Background snapshot: {len(races)} election records ({len(unique_races)} unique)')
             else:
                 log.warning('Background snapshot: no election races returned')
             record = {
