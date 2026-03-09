@@ -3,12 +3,84 @@
 <head>
   <meta charset="utf-8">
   <title>San Diego Political Snapshot</title>
-  <style>body{font-family:Arial,Helvetica,sans-serif;padding:20px} a{color:navy}</style>
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; padding: 20px; max-width: 900px; }
+    a { color: navy; }
+    h2 { border-bottom: 1px solid #ccc; padding-bottom: 4px; margin-top: 30px; }
+    .gov-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .gov-card { border: 1px solid #ddd; border-radius: 6px; padding: 14px; background: #f9f9f9; }
+    .gov-card h3 { margin: 0 0 8px; color: #333; }
+    .gov-card ul { margin: 0; padding-left: 18px; }
+    .gov-card p { margin: 4px 0; }
+    .facts-box { background: #eef4ff; border-left: 4px solid navy; padding: 12px 16px; margin-top: 16px; }
+    .snapshot-section { margin-top: 30px; }
+  </style>
 </head>
 <body>
   <h1>San Diego Political Snapshot</h1>
   <p><a href="{{ url_for('history') }}">History</a></p>
 
+  <h2>San Diego Local Government</h2>
+  <div class="gov-grid">
+
+    <div class="gov-card">
+      <h3><a href="{{ url_for('government_body', slug='city-council') }}">City Council</a></h3>
+      <ul>
+        <li>9 members elected by district (Districts 1–9)</li>
+        <li>4-year terms; 2-term limit</li>
+        <li>Sets policy, approves the budget, passes ordinances</li>
+      </ul>
+    </div>
+
+    <div class="gov-card">
+      <h3><a href="{{ url_for('government_body', slug='mayor') }}">Mayor</a></h3>
+      <p>Directly elected citywide — strong-mayor system since 2006.</p>
+      <ul>
+        <li>Chief executive; manages day-to-day city operations</li>
+        <li>Proposes the annual budget</li>
+        <li>Has veto power over Council legislation</li>
+        <li><strong>Current mayor:</strong> Todd Gloria (elected 2020, re-elected 2024)</li>
+      </ul>
+    </div>
+
+    <div class="gov-card">
+      <h3><a href="{{ url_for('government_body', slug='city-attorney') }}">City Attorney</a></h3>
+      <p>Independently elected citywide. Provides legal counsel to the city and prosecutes misdemeanors.</p>
+    </div>
+
+    <div class="gov-card">
+      <h3><a href="{{ url_for('government_body', slug='city-auditor') }}">City Auditor</a></h3>
+      <p>Independently elected. Conducts performance and financial audits of city operations.</p>
+    </div>
+
+    <div class="gov-card">
+      <h3><a href="{{ url_for('government_body', slug='coo') }}">City Chief Operating Officer</a></h3>
+      <p>Appointed by the mayor. Oversees city departments operationally.</p>
+    </div>
+
+    <div class="gov-card">
+      <h3><a href="{{ url_for('government_body', slug='county-board') }}">San Diego County Board of Supervisors</a></h3>
+      <p><em>(Separate from the City)</em></p>
+      <ul>
+        <li>5 members, each representing a county district</li>
+        <li>Provides public health, courts, elections, and social services across the entire county</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="facts-box">
+    <strong>Key Facts</strong>
+    <ul>
+      <li>California's 2nd-largest city; 8th largest in the US</li>
+      <li>18 official city departments (police, fire-rescue, parks, public utilities, etc.)</li>
+      <li>Annual city budget: ~$5–6 billion</li>
+      <li>San Diego Unified School District governed separately by its own elected board</li>
+    </ul>
+  </div>
+
+  <div class="snapshot-section">
+  <h2>Live Snapshot</h2>
   {% with messages = get_flashed_messages() %}
     {% if messages %}
       <ul>
@@ -35,5 +107,6 @@
   {% else %}
     <p>No snapshot available yet. The background scraper has not run yet — please check back shortly.</p>
   {% endif %}
+  </div>
 </body>
 </html>
