@@ -30,7 +30,7 @@
 
 | ID | Title | Status | Notes |
 |----|-------|--------|-------|
-| E2-001 | Fix election races returning 0 results in background snapshot | `todo` | Background snapshot logs warning — investigate scraper |
+| E2-001 | Fix election races returning 0 results in background snapshot | `done` | sdvote.com uses JS hex escapes (\x22) in embedded JSON; use re.sub to convert before json.loads — now returns 351 records |
 | E2-002 | Scrape current City Council member roster | `todo` | sandiego.gov/city-clerk/elected |
 | E2-003 | Scrape County Supervisors roster | `todo` | sandiegocounty.gov |
 | E2-004 | Schedule and persist scraped officeholder data to DB | `todo` | Extend storage.py |
