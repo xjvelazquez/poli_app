@@ -15,6 +15,17 @@
     .live-meta { color: #777; font-size: 0.9em; margin-bottom: 8px; }
     .live-content ul { padding-left: 18px; }
     nav { margin-bottom: 20px; font-size: 0.9em; }
+    .officeholder-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; margin-top: 14px; }
+    .oh-card { border: 1px solid #ddd; border-radius: 6px; padding: 12px; background: #fafafa; }
+    .oh-card img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; margin-bottom: 8px; display: block; }
+    .oh-card .oh-photo-placeholder { width: 64px; height: 64px; border-radius: 50%; background: #dde4f0; display: flex; align-items: center; justify-content: center; font-size: 1.6em; margin-bottom: 8px; }
+    .oh-card .oh-name { font-weight: bold; font-size: 1em; margin: 0 0 2px; }
+    .oh-card .oh-title { color: #555; font-size: 0.88em; margin: 0 0 2px; }
+    .oh-card .oh-district { color: navy; font-size: 0.85em; font-weight: bold; margin: 0 0 4px; }
+    .oh-card .oh-term { color: #777; font-size: 0.82em; margin: 0 0 6px; }
+    .oh-card .oh-links { font-size: 0.85em; }
+    .oh-card .oh-links a { margin-right: 8px; }
+    .oh-note { color: #888; font-style: italic; font-size: 0.9em; margin-top: 10px; }
   </style>
 </head>
 <body>
@@ -42,6 +53,37 @@
         <li>{{ fact }}</li>
       {% endfor %}
     </ul>
+  </div>
+
+  <div class="officeholders-section">
+    <h2>Current Officeholders</h2>
+    {% if officeholders %}
+      <div class="officeholder-grid">
+        {% for oh in officeholders %}
+          {% if oh.name %}
+          <div class="oh-card">
+            {% if oh.photo_url %}
+              <img src="{{ oh.photo_url }}" alt="Photo of {{ oh.name }}">
+            {% else %}
+              <div class="oh-photo-placeholder">&#128100;</div>
+            {% endif %}
+            <p class="oh-name">{{ oh.name }}</p>
+            <p class="oh-title">{{ oh.title }}</p>
+            {% if oh.district %}<p class="oh-district">{{ oh.district }}</p>{% endif %}
+            {% if oh.term_start %}<p class="oh-term">In office since {{ oh.term_start }}</p>{% endif %}
+            <div class="oh-links">
+              {% if oh.url %}<a href="{{ oh.url }}" target="_blank" rel="noopener">Official page</a>{% endif %}
+              {% if oh.email %}<a href="mailto:{{ oh.email }}">{{ oh.email }}</a>{% endif %}
+            </div>
+          </div>
+          {% elif oh._note %}
+            <p class="oh-note">&#9432; {{ oh._note }}</p>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% else %}
+      <p>No officeholder data available yet.</p>
+    {% endif %}
   </div>
 
   <div class="live-section">

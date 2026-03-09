@@ -21,7 +21,7 @@
 |----|-------|--------|-------|
 | E1-001 | Display San Diego local government overview on home page | `done` | City Council, Mayor, Attorney, Auditor, COO, County Board, Key Facts |
 | E1-002 | Add individual pages per government body (e.g. /mayor, /city-council) | `done` | `/government/<slug>` routes; shared template; weekly scraper; cards linked from home |
-| E1-003 | Add current officeholder data (names, terms, contact) | `todo` | Could be static JSON or scraped |
+| E1-003 | Add current officeholder data (names, terms, contact) | `done` | Static `officeholders.py`; name, title, district, term start, URL, email; rendered as cards |
 | E1-004 | Add San Diego County Board of Supervisors detail page | `todo` | 5 districts, current supervisors |
 
 ---
@@ -66,3 +66,4 @@
 | E1-001 | Display San Diego local government overview on home page | 2026-03-08 |
 | E4-003 | Externalize app secret key to environment variable | 2026-03-08 |
 | E1-002 | Add individual pages per government body | 2026-03-08 |
+| E1-003 | Add current officeholder data | 2026-03-08 |
